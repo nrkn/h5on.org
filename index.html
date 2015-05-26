@@ -1,0 +1,207 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>h5on.org</title>
+    <link rel="stylesheet" href="css/foundation.css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans" />
+    <link rel="stylesheet" href="h5on.css" />
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="styles/solarized_light.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//cloud.typography.com/6291652/793188/css/fonts.css" />
+    <script src="js/vendor/modernizr.js"></script>
+  </head>
+  <body>   
+    <div class="row">
+      <div class="large-12 columns">
+        <header>
+          <div class="row">
+            <div class="large-5 columns">
+              <h1><a href="/"><img src="h5on.svg" style="height: 1.5em; width: auto;" /></a></h1>
+            </div>
+            <div class="large-7 columns">
+              <h2>HTML 5 Object Notation</h2>
+            </div>
+          </div>
+          <h3>
+            H5ON is an object notation, like JSON, for representing objects as HTML5 elements.
+          </h3>
+          <nav>
+            <ul>
+              <li class="current">
+                <a href="/"><i class="fa fa-home" title="Home"></i></a>
+              </li>            
+              <li>
+                <a href="https://github.com/nrkn/h5on/blob/master/readme.md">Docs</a>
+              </li>
+              <li>
+                <a href="demos.html">Demos</a>
+              </li>
+              <li>
+                <a href="https://github.com/nrkn/h5on">GitHub</a>
+              </li>
+            </ul>
+          </nav>
+        </header>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-5 columns">
+        <h2>JSON</h2>
+        <pre><code id="demo-json" class="json"></code></pre>
+      </div>
+      <div class="large-7 columns h5on-column">        
+        <h2>H5ON</h2>
+        <ul class="tabs" data-tab>
+          <li class="tab-title active"><a href="#demo-h5on-live">Live</a></li>
+          <li class="tab-title"><a href="#demo-h5on-source">Source</a></li>
+        </ul>
+        <div class="tabs-content">
+          <div class="content active" id="demo-h5on-live">
+            <div id="demo-h5on">
+            </div>
+          </div>
+          <div class="content" id="demo-h5on-source">
+            <pre><code class="html" id="demo-h5on-html"></code></pre>
+          </div>
+        </div>        
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-12 columns">
+        <main>
+          <p>
+            It was created as a thought experiment with two goals in mind:
+          </p>
+          <ol>
+            <li>Traverse a JavaScript object graph using jQuery (specifically, a JSON-serializable object)</li>
+            <li>The notation itself is rendered by layout engines in a human readable format</li>
+          </ol>
+          <p>
+            As this is a thought experiment, please be aware that there are many alternative ways to traverse object graphs, and that for the most part they are much saner than this one. You have been warned!
+          </p>
+          <p>
+            Despite that caveat, you can do some interesting and powerful things using this approach.          
+          </p>
+        </main>
+      </div>
+    </div>    
+    <div class="row">
+      <div class="large-12 columns">
+        <footer>
+          <p>
+            © 2015 <a href="mailto:nrkn.com@gmail.com">Nik Coughlin</a> | <a href="https://github.com/nrkn/h5on">View on Github</a>
+          </p>
+        </footer>
+      </div>
+    </div>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script src="js/underscore-min.js"></script>
+    <script src="js/ICanHaz.min.js"></script>
+    <script src="js/snap.svg-min.js"></script>
+    <script src="highlight.pack.js"></script>
+    <script src="h5on.js"></script>
+    <script>
+      function pretty( $el ){        
+        function print( $el, depth ){
+          var result = '';
+          $el.each( function(){
+            var $current = $( this );  
+            var el = $current[ 0 ];
+            result += Array( depth * 2 + 1 ).join( ' ' );
+            
+            if( el.nodeType === 3 ){
+              result += el.textContent;
+              result += '\n';
+              return;
+            }
+            
+            result += '<';
+            result += el.tagName.toLowerCase();
+            if( el.attributes.length ){
+              $.each( el.attributes, function( i, attribute ){
+                result += ( ' ' + attribute.name + '="' + attribute.value + '"' );
+              });
+            }
+            result += '>\n';
+            $.each( $current.contents(), function( i, content ){
+              result += print( $( content ), depth + 1 );
+            });
+            result += Array( depth * 2 + 1 ).join( ' ' );
+            result += '</';
+            result += el.tagName.toLowerCase();
+            result += '>\n'
+          });
+          return result;
+        }
+        
+        return print( $el, 0 );
+      }      
+      
+      $(document).foundation();
+      
+      var sampleData = {
+        "Name": "Akosua",
+        "Occupation": "Zombie Hunter",
+        "Is Infected": false,
+        "Equipment": [
+          {
+            "Name": "Backpack",
+            "Type": "Container",
+            "Capacity": 40000,
+            "Weight": 2000,
+            "Contents": [
+              {
+                "Name": "Water Bottle",
+                "Type": "Container",
+                "Capacity": 1000,
+                "Weight": 0.2,
+                "Contents": [
+                  {
+                    "Name": "Water",
+                    "Weight": 365.9
+                  }
+                ]
+              },
+              {
+                "Name": "Necronomicon",
+                "Type": "Book",
+                "Weight": 0.87
+              }
+            ]
+          },    
+          {
+            "Name": "Katana",
+            "Type": "Weapon",
+            "Class": "Edged",
+            "Damage": {
+              "Base": "4d6",
+              "Modifier": -2
+            },
+            "Weight": 1200
+          }
+        ]
+      };
+      
+      $( function(){
+        var $demoJsonContainer = $( '#demo-json' );
+        $demoJsonContainer.text( JSON.stringify( sampleData, null, 2 ) );
+        hljs.highlightBlock( $demoJsonContainer[ 0 ] );
+        
+        var $demoH5onContainer = $( '#demo-h5on' );
+        
+        var $demoH5on = $( sampleData ).h5on();
+        
+        $demoH5onContainer.append( $demoH5on );
+        
+        var $demoH5onSourceContainer = $( '#demo-h5on-html' );
+        $demoH5onSourceContainer.text( pretty( $demoH5on ) );
+        
+        hljs.highlightBlock( $demoH5onSourceContainer[ 0 ] );
+      });
+    </script>
+  </body>
+</html>
