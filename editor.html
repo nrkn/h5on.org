@@ -175,6 +175,7 @@
       };
       
       function change( $h5on ){
+        console.log( $h5on );
         $( '#output-json-data' ).text( JSON.stringify( $h5on.h5on(), null, 2 ) );
         hljs.highlightBlock( $( '#output-json-data' )[ 0 ] );
         $( '#output-html-data' ).text( pretty( $h5on ) );
@@ -371,8 +372,9 @@
           return false;
         });   
         
-        $null.click( function(){
+        $null.click( function(){          
           var $new = $.h5on( null );
+          
           if( isContainer ){
             $el.replaceWith( $new );
           }
@@ -443,7 +445,7 @@
           
           createEditor( $( this ), $h5on );
           
-          change( $h5on );
+          change( $inputH5on.find( '> *:first()' ) );
           
           return false;
         });
