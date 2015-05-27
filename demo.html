@@ -75,6 +75,7 @@
               </ul>
               <div class="tabs-content">
                 <div class="content active" id="input-json">
+                  <h4>Edit me!</h4>
                   <pre><code id="input-json-data" class="json" contenteditable></code></pre>
                 </div>
                 <div class="content" id="input-h5on">
@@ -231,7 +232,7 @@
           hljs.highlightBlock( $inputHtml[ 0 ] );
         }
         
-        $query.val( 'h5-object[data-keys~="Weight"]' );
+        $query.val( 'h5-object:has( > [data-key="Weight"] )' );
         
         $execute.click( function(){
           inputChanged();
