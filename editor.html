@@ -203,7 +203,7 @@
         return !isNaN(num)
       }
       
-      function isPrimitive( $el ){
+      function isElPrimitive( $el ){
         return $el.is( 'h5-null, h5-string, h5-number, h5-boolean' );
       }
       
@@ -222,8 +222,9 @@
         var isFirst = $el.is( ':first-child' );
         var isLast = $el.is( ':last-child' );
         var isContainer = $el.is( 'h5-object, h5-array' );
+        var isPrimitive = isElPrimitive( $el );
         
-        var $parentEl = isPrimitive( $el ) ? $el.parents( 'h5-property, h5-item' ).first() : $el.parents( 'h5-object, h5-array' ).first();
+        var $parentEl = isPrimitive ? $el.parents( 'h5-property, h5-item' ).first() : $el.parents( 'h5-object, h5-array' ).first();
         
         var $up = $editor.find( '[data-key="up"]' );
         var $down = $editor.find( '[data-key="down"]' );
@@ -262,7 +263,7 @@
           $add.parent().hide();
         }
         
-        if( isPrimitive( $el ) ){
+        if( isPrimitive ){
           $up.parent().hide();
           $down.parent().hide();
           $before.parent().hide();
@@ -355,7 +356,7 @@
         $value.click( function(){
           var $valueEl;
           
-          if( isPrimitive( $el ) ){
+          if( isPrimitive ){
             $valueEl = $el;
           } else if( $el.is( 'h5-property' ) ){
             $valueEl = $el.find( '> h5-value > *' );
@@ -363,24 +364,16 @@
             $valueEl = $el.find( '> *' );
           }
           
-          var value = $valueEl.text();
+          var value = JSON.stringify( $valueEl.h5on() );
           value = window.prompt( 'New value?', value );
           
           if( value ){
-            var asBool = value || value.toLowerCase().trim();
-            
-            if( value === 'null' || $.type( value ) === 'undefined' ){
-              value = null;
-            } else if( asBool === 'true' || asBool === 'false' ){
-              value = asBool === 'true';
-            } else if( isNumeric( value.trim() ) ){
-              value *= 1;
-            }          
+            value = JSON.parse( value ); 
                       
             var $new = $.h5on( value );
             $valueEl.replaceWith( $new );
             
-            if( isPrimitive( $el ) ){
+            if( isPrimitive ){
               $new.click();
             } else{
               $el.click();
@@ -395,7 +388,7 @@
           if( isContainer ){
             $el.replaceWith( $new );
           }
-          if( isPrimitive( $el ) ){
+          if( isPrimitive ){
             $el.replaceWith( $new );
           }
           if( $el.is( 'h5-property' ) ){
@@ -409,7 +402,7 @@
         });
         
         $array.click( function(){
-          if( isPrimitive( $el ) ){
+          if( isPrimitive ){
             var $arr = $.h5on( [ $el.h5on() ] );
             $el.replaceWith( $arr );
             $arr.find( 'h5-item > *' ).click();
@@ -418,7 +411,7 @@
         });
         
         $object.click( function(){
-          if( isPrimitive( $el ) ){
+          if( isPrimitive ){
             var $obj = $.h5on( { key: $el.h5on() } );
             $el.replaceWith( $obj );
             $obj.find( 'h5-property > h5-value > *' ).click();
