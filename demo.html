@@ -50,7 +50,60 @@
     <div class="row">
       <div class="large-12 columns">
         <main>
-          <h2>Coming soon</h2>
+          <h2>Interactive</h2>
+          <form>
+            <div class="row collapse">
+              <div class="medium-2 small-3 columns">
+                <label for="query" class="prefix">Selector</label>
+              </div>
+              <div class="medium-8 small-6 columns">
+                <input name="query" type="text" />
+              </div>
+              <div class="medium-2 small-3 columns">
+                <input type="submit" value="Execute" class="button postfix" />
+              </div>
+            </div>
+          </form>
+          <div class="row">
+            <div class="large-6 columns">
+              <h3>Input</h3>
+              <ul class="tabs" data-tab>
+                <li class="tab-title active"><a href="#input-json">JSON</a></li>
+                <li class="tab-title"><a href="#input-h5on">H5ON</a></li>
+                <li class="tab-title"><a href="#input-html">HTML</a></li>
+              </ul>
+              <div class="tabs-content">
+                <div class="content active" id="input-json">
+                  <pre><code id="input-json-data" class="json" contenteditable></code></pre>
+                </div>
+                <div class="content" id="input-h5on">
+                  <div id="input-h5on-data"></div>
+                </div>
+                <div class="content" id="input-html">
+                  <pre><code id="input-html-data" class="html"></code></pre>
+                </div>
+              </div>              
+            </div>
+            <div class="large-6 columns">
+              <h3>Output</h3>
+              <ul class="tabs" data-tab>
+                <li class="tab-title"><a href="#output-json">JSON</a></li>
+                <li class="tab-title active"><a href="#output-h5on">H5ON</a></li>
+                <li class="tab-title"><a href="#output-html">HTML</a></li>
+              </ul>
+              <div class="tabs-content">
+                <div class="content" id="output-json">
+                  <pre><code id="output-json-data" class="json"></code></pre>
+                </div>
+                <div class="content active" id="output-h5on">
+                  <div id="output-h5on-data"></div>
+                </div>
+                <div class="content" id="output-html">
+                  <pre><code id="output-html-data" class="html"></code></pre>
+                </div>
+              </div>              
+            </div>
+          </div>    
         </main>
       </div>
     </div>    
@@ -152,7 +205,59 @@
         ]
       };
       
-      $( function(){
+      $( function(){       
+        var $inputJson = $( '#input-json-data' );
+        var $inputH5on = $( '#input-h5on-data' );
+        var $inputHtml = $( '#input-html-data' );
+
+        var $outputJson = $( '#output-json-data' );
+        var $outputH5on = $( '#output-h5on-data' );
+        var $outputHtml = $( '#output-html-data' );
+        
+        var $execute = $( '[value="Execute"]' );
+        var $query = $( '[name="query"]' );
+        
+        $inputJson.text( JSON.stringify( sampleData, null, 2 ) );
+        
+        function inputChanged(){
+          hljs.highlightBlock( $inputJson[ 0 ] );
+          
+          var json = JSON.parse( $inputJson.text() );
+          var $h5on = $.h5on( json );
+          $inputH5on.html( $h5on );
+          
+          $inputHtml.text( pretty( $inputH5on.find( '> *' ) ) );
+          hljs.highlightBlock( $inputHtml[ 0 ] );
+        }
+        
+        $query.val( 'h5-object[data-keys~="Weight"]' );
+        
+        $execute.click( function(){
+          inputChanged();
+          
+          var query = $query.val().trim();
+          
+          var json = JSON.parse( $inputJson.text() );
+          var $h5on = $.h5on( json );          
+          
+          if( query !== '' ){
+            $h5on = $inputH5on.find( query );            
+          }
+          
+          $outputJson.text( JSON.stringify( $h5on.h5on(), null, 2 ) );
+          hljs.highlightBlock( $outputJson[ 0 ] );
+          
+          json = JSON.parse( $outputJson.text() );
+          $h5on = $.h5on( json );
+          $outputH5on.html( $h5on );
+          
+          $outputHtml.text( pretty( $outputH5on.find( '> *' ) ) );
+          hljs.highlightBlock( $outputHtml[ 0 ] );
+          
+          return false;
+        });        
+        
+        $execute.click();
       });
     </script>
     <script>
