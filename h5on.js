@@ -198,7 +198,7 @@
     }
     
     if( $el.is( 'h5-key' ) ){
-      var $value = $el.find( '> *' );
+      var $value = $el.text() + '';
       
       return toObj( $value );
     }    
