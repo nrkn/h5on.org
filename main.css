@@ -46,6 +46,9 @@ header > nav > ul > li {
 
 header > nav > ul > li > a {
   display: inline-block;
+}
+
+header > nav > ul > li > a, .theme-button {
   padding: 0.5em 1em;
   background: #f16529;
   border: 1px solid #e44d26;
@@ -61,12 +64,22 @@ header > nav > ul > li > a {
   top: 1px;
 }
 
-header > nav > ul > li > a:hover, header > nav > ul > li.current > a {
+header > nav > ul > li > a:hover, header > nav > ul > li.current > a, .theme-button:hover {
   background: #fff;
   border: 1px solid #eee;
   border-bottom: 0;
   color: #e44d26;  
   text-shadow: none;
+}
+
+.theme-button {
+  display: block;
+  text-align: center;
+  border: 1px solid #e44d26;
+}
+
+.theme-button:hover {
+  border: 1px solid #eee;
 }
 
 footer {
@@ -108,6 +121,16 @@ footer {
   opacity: 0.5;
 }
 
-.editor .mono {
+.mono {
   font-family: monospace;
+}
+
+#editor-key label {
+  font-size: 75%;
+  display: inline-block;
+}
+
+#editor-key i, #editor-key .mono {
+  color: #39f;
+  display: inline-block;
 }

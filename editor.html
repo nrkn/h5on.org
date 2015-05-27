@@ -37,7 +37,7 @@
                 <a href="https://github.com/nrkn/h5on/blob/master/readme.md">Docs</a>
               </li>
               <li class="current">
-                <a href="demo.html">Demo</a>
+                <a href="demos.html">Demos</a>
               </li>
               <li>
                 <a href="https://github.com/nrkn/h5on">GitHub</a>
@@ -54,6 +54,23 @@
           <div class="row">
             <div class="large-7 columns">
               <h3>H5ON</h3>
+              <p>Click an element to edit. Hover buttons for description or <a href="#" id="view-key">view key</a>.</p>
+              <div id="editor-key">
+                <ul class="large-block-grid-4">
+                  <li><i class="fa fa-fw fa-chevron-up"></i> <label>Move up</label></li>
+                  <li><i class="fa fa-fw fa-chevron-down"></i> <label>Move down</label></li>
+                  <li><i class="fa fa-fw fa-arrow-circle-up"></i> <label>Insert new before</label></li>
+                  <li><i class="fa fa-fw fa-arrow-circle-down"></i> <label>Insert new after</label></li>
+                  <li><i class="fa fa-fw fa-plus-circle"></i> <label>Add new</label></li>
+                  <li><i class="fa fa-fw fa-key"></i> <label>Edit key</label></li>
+                  <li><i class="fa fa-fw fa-pencil"></i> <label>Edit value</label></li>
+                  <li><i class="fa fa-fw fa-ban"></i> <label>Set to null</label></li>        
+                  <li><span class="mono">[]</span> <label>Wrap in array</label></li>        
+                  <li><span class="mono">{}</span> <label>Wrap in object</label></li>        
+                  <li><i class="fa fa-fw fa-external-link"></i> <label>Select parent</label></li>
+                  <li><i class="fa fa-fw fa-trash"></i> <label>Delete</label></li>
+                </ul>
+              </div>
               <div id="input-h5on"></div>
             </div>
             <div class="large-5 columns">
@@ -415,6 +432,19 @@
           }
           return false;
         });
+        
+        $add.click( function(){
+          var $new;
+          if( $el.is( 'h5-object' ) ){
+            $new = $.h5on({ key: 'key', value: null }, 'property' );
+          }
+          if( $el.is( 'h5-array' ) ){
+            $new = $.h5on( null, 'item' );
+          }            
+          $el.append( $new );
+          $new.click();
+          return false;
+        });
 
         $delete.click( function(){
           $el.remove();
@@ -435,6 +465,11 @@
         
         $( 'h5-property, h5-item' ).css({
           cursor: 'pointer'
+        });
+        
+        $( '#editor-key' ).hide();
+        $( '#view-key' ).click( function(){
+          $( '#editor-key' ).toggle();
         });
         
         $inputH5on.on( 'click', 'h5-property, h5-item, h5-array, h5-object, h5-string, h5-number, h5-boolean, h5-null', function(){
@@ -460,18 +495,18 @@
     </script>
     <script type="text/html" id="editor">
       <ul class="editor">
-        <li><a href="#" data-key="up"><i class="fa fa-fw fa-chevron-up"></i></a></li>
-        <li><a href="#" data-key="down"><i class="fa fa-fw fa-chevron-down"></i></a></li>
-        <li><a href="#" data-key="before"><i class="fa fa-fw fa-arrow-circle-up"></i></a></li>
-        <li><a href="#" data-key="after"><i class="fa fa-fw fa-arrow-circle-down"></i></a></li>
-        <li><a href="#" data-key="add"><i class="fa fa-fw fa-plus-circle"></i></a></li>
-        <li><a href="#" data-key="key"><i class="fa fa-fw fa-key"></i></a></li>
-        <li><a href="#" data-key="value"><i class="fa fa-fw fa-pencil"></i></a></li>
-        <li><a href="#" data-key="null"><i class="fa fa-fw fa-ban"></i></a></li>        
-        <li><a href="#" data-key="array"><span class="mono">[]</span></a></li>        
-        <li><a href="#" data-key="object"><span class="mono">{}</span></a></li>        
-        <li><a href="#" data-key="parent"><i class="fa fa-fw fa-external-link"></i></a></li>
-        <li><a href="#" data-key="delete"><i class="fa fa-fw fa-trash"></i></a></li>
+        <li><a href="#" data-key="up" title="Move up"><i class="fa fa-fw fa-chevron-up"></i></a></li>
+        <li><a href="#" data-key="down" title="Move down"><i class="fa fa-fw fa-chevron-down"></i></a></li>
+        <li><a href="#" data-key="before" title="Insert new before"><i class="fa fa-fw fa-arrow-circle-up"></i></a></li>
+        <li><a href="#" data-key="after" title="Insert new after"><i class="fa fa-fw fa-arrow-circle-down"></i></a></li>
+        <li><a href="#" data-key="add" title="Add new"><i class="fa fa-fw fa-plus-circle"></i></a></li>
+        <li><a href="#" data-key="key" title="Edit key"><i class="fa fa-fw fa-key"></i></a></li>
+        <li><a href="#" data-key="value" title="Edit value"><i class="fa fa-fw fa-pencil"></i></a></li>
+        <li><a href="#" data-key="null" title="Set to null"><i class="fa fa-fw fa-ban"></i></a></li>        
+        <li><a href="#" data-key="array" title="Wrap in array"><span class="mono">[]</span></a></li>        
+        <li><a href="#" data-key="object" title="Wrap in object"><span class="mono">{}</span></a></li>        
+        <li><a href="#" data-key="parent" title="Select parent"><i class="fa fa-fw fa-external-link"></i></a></li>
+        <li><a href="#" data-key="delete" title="Delete"><i class="fa fa-fw fa-trash"></i></a></li>
       </ul>
     </script>
     <script>
