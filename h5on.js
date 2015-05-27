@@ -198,9 +198,7 @@
     }
     
     if( $el.is( 'h5-key' ) ){
-      var $value = $el.text() + '';
-      
-      return toObj( $value );
+      return $el.text();
     }    
     
     if( $el.is( 'h5-item' ) ){
