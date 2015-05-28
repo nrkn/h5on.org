@@ -223,6 +223,7 @@
         var isLast = $el.is( ':last-child' );
         var isContainer = $el.is( 'h5-object, h5-array' );
         var isPrimitive = isElPrimitive( $el );
+        var isValue = $el.is( '[data-value]' );
         
         var $parentEl = isPrimitive ? $el.parents( 'h5-property, h5-item' ).first() : $el.parents( 'h5-object, h5-array' ).first();
         
@@ -244,7 +245,7 @@
         
         if( $el.is( 'h5-item' ) ) $key.remove();        
         
-        if( !$el.is( '[data-value]' ) ) {
+        if( !isValue ) {
           $value.parent().hide();
           $null.parent().hide();
         }
@@ -351,7 +352,7 @@
           
           $el.click();
           return false;
-        });
+        });       
         
         $value.click( function(){
           var $valueEl;
