@@ -1,0 +1,44 @@
+.selected {
+  outline: 2px dotted #268bd2;
+}
+
+.editor {
+  background: rgba( 53, 153, 255, 0.25 );
+  display: inline-block;
+  position: absolute;
+  list-style: none;
+  margin: 0;
+  padding: 0.125em 0.25em;
+}
+
+.editor li, .editor a {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+.editor a {
+  color: #fff;
+  margin-right: 0.125em; 
+  background: #39f;
+  padding: 0.125em 0.25em;
+}
+
+.editor .disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.mono {
+  font-family: monospace;
+}
+
+#editor-key label {
+  font-size: 75%;
+  display: inline-block;
+}
+
+#editor-key i, #editor-key .mono {
+  color: #39f;
+  display: inline-block;
+}

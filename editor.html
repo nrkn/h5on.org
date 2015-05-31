@@ -9,7 +9,9 @@
     <link rel="stylesheet" href="h5on.css" />
     <link rel="stylesheet" href="main.css" />
     <link rel="stylesheet" href="solarized_light.css" />
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="h5on-solarized-light.css" />
+    <link rel="stylesheet" href="editor.css" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="//cloud.typography.com/6291652/793188/css/fonts.css" />
     <script src="js/vendor/modernizr.js"></script>
   </head>
@@ -74,7 +76,6 @@
               <div id="input-h5on"></div>
             </div>
             <div class="large-5 columns">
-              <h3>Output</h3>
               <ul class="tabs" data-tab>
                 <li class="tab-title active"><a href="#output-json">JSON</a></li>
                 <li class="tab-title"><a href="#output-html">HTML</a></li>
@@ -107,89 +108,11 @@
     <script src="js/ICanHaz.min.js"></script>
     <script src="js/snap.svg-min.js"></script>
     <script src="highlight.pack.js"></script>
+    <script src="pretty.js"></script>
+    <script src="sample-data.js"></script>
     <script src="h5on.js"></script>
-    <script>
-      function pretty( $el ){        
-        function print( $el, depth ){
-          var result = '';
-          $el.each( function(){
-            var $current = $( this );  
-            var el = $current[ 0 ];
-            result += Array( depth * 2 + 1 ).join( ' ' );
-            
-            if( el.nodeType === 3 ){
-              result += el.textContent;
-              result += '\n';
-              return;
-            }
-            
-            result += '<';
-            result += el.tagName.toLowerCase();
-            if( el.attributes.length ){
-              $.each( el.attributes, function( i, attribute ){
-                result += ( ' ' + attribute.name + '="' + attribute.value + '"' );
-              });
-            }
-            result += '>\n';
-            $.each( $current.contents(), function( i, content ){
-              result += print( $( content ), depth + 1 );
-            });
-            result += Array( depth * 2 + 1 ).join( ' ' );
-            result += '</';
-            result += el.tagName.toLowerCase();
-            result += '>\n'
-          });
-          return result;
-        }
-        
-        return print( $el, 0 );
-      }      
-      
+    <script>       
       $(document).foundation();
-      
-      var sampleData = {
-        "Name": "Akosua",
-        "Occupation": "Zombie Hunter",
-        "Is Infected": false,
-        "Stats": [ 12, 14, 10, 16, 9, 15 ],
-        "Equipment": [
-          {
-            "Name": "Backpack",
-            "Type": "Container",
-            "Capacity": 40000,
-            "Weight": 2000,
-            "Contents": [
-              {
-                "Name": "Water Bottle",
-                "Type": "Container",
-                "Capacity": 1000,
-                "Weight": 0.2,
-                "Contents": [
-                  {
-                    "Name": "Water",
-                    "Weight": 365.9
-                  }
-                ]
-              },
-              {
-                "Name": "Necronomicon",
-                "Type": "Book",
-                "Weight": 0.87
-              }
-            ]
-          },    
-          {
-            "Name": "Katana",
-            "Type": "Weapon",
-            "Class": "Edged",
-            "Damage": {
-              "Base": "4d6",
-              "Modifier": -2
-            },
-            "Weight": 1200
-          }
-        ]
-      };
       
       function change( $h5on ){
         console.log( $h5on );
@@ -203,8 +126,22 @@
         return !isNaN(num)
       }
       
-      function isElPrimitive( $el ){
-        return $el.is( 'h5-null, h5-string, h5-number, h5-boolean' );
+      function showEditor( $button, isShow ){
+        $button.parent().toggle( isShow );
+      }
+      
+      function replaceEl( $el, value ){
+        var isProperty = $el.is( '[data-key]' );
+        
+        var $new = $.h5on( value );
+        
+        if( isProperty ){
+          $new.attr( 'data-key', $el.attr( 'data-key' ) );
+        }
+        
+        $el.replaceWith( $new );
+
+        return $new;
       }
       
       function createEditor( $el, $h5on ){
@@ -219,14 +156,18 @@
           top: location.top - $editor.outerHeight()
         });
         
+        var $parentEl = $el.parents( 'js-object, js-array' ).first();
+
         var isFirst = $el.is( ':first-child' );
         var isLast = $el.is( ':last-child' );
-        var isContainer = $el.is( 'h5-object, h5-array' );
-        var isPrimitive = isElPrimitive( $el );
-        var isValue = $el.is( '[data-value]' );
-        
-        var $parentEl = isPrimitive ? $el.parents( 'h5-property, h5-item' ).first() : $el.parents( 'h5-object, h5-array' ).first();
-        
+        var isContainer = $el.is( 'js-object, js-array' );
+        var isPrimitive = $el.is( 'js-null, js-string, js-number, js-boolean' );
+        var isProperty = $el.is( '[data-key]' );
+        var isArrayItem = $el.parent().is( 'js-array' );        
+        var isChild = isProperty || isArrayItem;
+        var isNull = $el.is( 'js-null' );
+        var hasParent = $parentEl.length > 0;
+
         var $up = $editor.find( '[data-key="up"]' );
         var $down = $editor.find( '[data-key="down"]' );
         var $before = $editor.find( '[data-key="before"]' );
@@ -240,114 +181,58 @@
         var $object = $editor.find( '[data-key="object"]' );
         var $delete = $editor.find( '[data-key="delete"]' );
         
+        showEditor( $up, isChild );
+        showEditor( $down, isChild );
+        showEditor( $before, isChild );
+        showEditor( $after, isChild );
+        showEditor( $key, isProperty );
+        showEditor( $value, isPrimitive );
+        showEditor( $null, !isNull );
+        showEditor( $add, isContainer );
+        showEditor( $parent, hasParent );
+        showEditor( $array, isPrimitive );
+        showEditor( $object, isPrimitive );
+        showEditor( $delete, hasParent );
+
         if( isFirst ) $up.addClass( 'disabled' );
         if( isLast ) $down.addClass( 'disabled' );
         
-        if( $el.is( 'h5-item' ) ) $key.remove();        
-        
-        if( !isValue ) {
-          $value.parent().hide();
-          $null.parent().hide();
-        }
-        if( isContainer ){
-          $up.parent().hide();
-          $down.parent().hide();
-          $before.parent().hide();
-          $after.parent().hide();
-          $key.parent().hide();
-          $value.parent().hide();
-          $null.parent().show();
-          $delete.parent().hide();
-          $array.parent().hide();
-          $object.parent().hide();
-        } else {
-          $add.parent().hide();
-        }
-        
-        if( isPrimitive ){
-          $up.parent().hide();
-          $down.parent().hide();
-          $before.parent().hide();
-          $after.parent().hide();
-          $key.parent().hide();
-          $null.parent().show();
-          $value.parent().show();
-          $delete.parent().hide();
-        } else {
-          $array.parent().hide();
-          $object.parent().hide();
-        }
-        
-        if( $el.is( 'h5-null' ) ){
-          $null.parent().hide();
-        }
-        
-        if( $parentEl.length === 0 ){
-          $parent.parent().hide();
-        }
-        
-        if( !isFirst ){
-          $up.click( function(){
-            var $prev = $el.prev();
-            $prev.before( $el );
-            $el.click();
-            return false;
-          });
-        }
-        
-        if( !isLast ){
-          $down.click( function(){
-            var $next = $el.next();
-            $next.after( $el );
-            $el.click();
-            return false;
-          });
-        }
-        
-        $before.click( function(){
-          if( $el.is( 'h5-property' ) ){
-            var $property = $.h5on({
-              key: 'key',
-              value: null
-            }, 'property');
-            $el.before( $property );
-            $property.click();
-          }
-
-          if( $el.is( 'h5-item' ) ){
-            var $property = $.h5on( null, 'item' );
-            $el.before( $property );
-            $property.click();
-          }
-          
+        $up.click( function(){
+          var $prev = $el.prev();
+          $prev.before( $el );
+          $el.click();
           return false;
         });
         
-        $after.click( function(){
-          if( $el.is( 'h5-property' ) ){
-            var $property = $.h5on({
-              key: 'key',
-              value: null
-            }, 'property');
-            $el.after( $property );
-            $property.click();
-          }
-
-          if( $el.is( 'h5-item' ) ){
-            var $property = $.h5on( null, 'item' );
-            $el.after( $property );
-            $property.click();
-          }
-          
-          return false;        
+        $down.click( function(){
+          var $next = $el.next();
+          $next.after( $el );
+          $el.click();
+          return false;
         });
         
+        $before.click( function(){
+          var $new = isProperty ? $.h5on( null, 'key' ) : $.h5on( null );
+          $el.before( $new );
+          $new.click();
+          
+          return false;
+        });        
+        
+        $after.click( function(){
+          var $new = isProperty ? $.h5on( null, 'key' ) : $.h5on( null );
+          $el.after( $new );
+          $new.click();
+          
+          return false;
+        });        
+        
         $key.click( function(){
-          var key = $el.find( '> h5-key' ).text();
+          var key = $el.attr( 'data-key' );
           var value = window.prompt( 'New key?', key );
           
           if( value ){
-            $el.find( '> h5-key' ).text( value );            
+            $el.attr( 'data-key', value );
           }
           
           $el.click();
@@ -355,68 +240,49 @@
         });       
         
         $value.click( function(){
-          var $valueEl;
-          
-          if( isPrimitive ){
-            $valueEl = $el;
-          } else if( $el.is( 'h5-property' ) ){
-            $valueEl = $el.find( '> h5-value > *' );
-          } else if( $el.is( 'h5-item' ) ){
-            $valueEl = $el.find( '> *' );
-          }
-          
-          var value = JSON.stringify( $valueEl.h5on() );
+          var value = JSON.stringify( $el.h5on() );
           value = window.prompt( 'New value?', value );
           
           if( value ){
-            value = JSON.parse( value ); 
-                      
-            var $new = $.h5on( value );
-            $valueEl.replaceWith( $new );
-            
-            if( isPrimitive ){
-              $new.click();
-            } else{
-              $el.click();
+            try {            
+              value = JSON.parse( value ); 
+            } catch( e ) {
+              if( e instanceof SyntaxError ){
+                value = JSON.parse( '"' + value + '"' );
+              } else {
+                throw e;
+              }
             }
+                     
+            var $new = replaceEl( $el, value );
+            
+            $new.click();
           }
-          return false;
-        });   
-        
-        $null.click( function(){          
-          var $new = $.h5on( null );
           
-          if( isContainer ){
-            $el.replaceWith( $new );
-          }
-          if( isPrimitive ){
-            $el.replaceWith( $new );
-          }
-          if( $el.is( 'h5-property' ) ){
-            $el.find( '> h5-value > *' ).replaceWith( $new );
-          }
-          if( $el.is( 'h5-item' ) ){
-            $el.find( '> *' ).replaceWith( $new );
-          }                    
+          return false;
+        }); 
+
+        $null.click( function(){          
+          var $new = replaceEl( $el, null );
+          
           $new.click();
+          
           return false;
         });
         
-        $array.click( function(){
-          if( isPrimitive ){
-            var $arr = $.h5on( [ $el.h5on() ] );
-            $el.replaceWith( $arr );
-            $arr.find( 'h5-item > *' ).click();
-          }
+        $array.click( function(){          
+          var $new = replaceEl( $el, [ $el.h5on() ] );
+          
+          $new.click();
+          
           return false;
         });
         
-        $object.click( function(){
-          if( isPrimitive ){
-            var $obj = $.h5on( { key: $el.h5on() } );
-            $el.replaceWith( $obj );
-            $obj.find( 'h5-property > h5-value > *' ).click();
-          }
+        $object.click( function(){          
+          var $new = replaceEl( $el, { key: $el.h5on() } );
+          
+          $new.click();
+          
           return false;
         });        
         
@@ -424,26 +290,25 @@
           if( $parentEl.length > 0 ){
             $parentEl.click();
           }
+          
           return false;
-        });
-        
+        });  
+
         $add.click( function(){
-          var $new;
-          if( $el.is( 'h5-object' ) ){
-            $new = $.h5on({ key: 'key', value: null }, 'property' );
-          }
-          if( $el.is( 'h5-array' ) ){
-            $new = $.h5on( null, 'item' );
-          }            
+          var $new = $el.is( 'js-object' ) ? $.h5on( null, 'key' ) : $.h5on( null );
+          
           $el.append( $new );
+          
           $new.click();
+          
           return false;
-        });
+        }); 
 
         $delete.click( function(){
           $el.remove();
-          $editor.remove();
-          change( $h5on );
+          
+          $parentEl.click();
+          
           return false;
         });
       }
@@ -457,16 +322,18 @@
         var $h5on = $.h5on( sampleData );
         $inputH5on.html( $h5on );        
         
-        $( 'h5-property, h5-item' ).css({
+        $( 'js-property, js-item' ).css({
           cursor: 'pointer'
         });
         
         $( '#editor-key' ).hide();
         $( '#view-key' ).click( function(){
           $( '#editor-key' ).toggle();
+          
+          return false;
         });
         
-        $inputH5on.on( 'click', 'h5-property, h5-item, h5-array, h5-object, h5-string, h5-number, h5-boolean, h5-null', function(){
+        $inputH5on.on( 'click', 'js-array, js-object, js-string, js-number, js-boolean, js-null', function(){
           $( '.editor' ).remove();          
           $( '.selected' ).removeClass( 'selected' );
           
