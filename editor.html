@@ -147,7 +147,9 @@
       function createEditor( $el, $h5on ){
         $( '.editor' ).remove();
         
-        var $editor = ich.editor();
+        var type = $el[ 0 ].tagName.split( '-' )[ 1 ].toLowerCase();
+        
+        var $editor = ich.editor({ type: type });
         var location = $el.offset();
         $( 'body' ).append( $editor );
         
@@ -359,20 +361,23 @@
       });
     </script>
     <script type="text/html" id="editor">
-      <ul class="editor">
-        <li><a href="#" data-key="up" title="Move up"><i class="fa fa-fw fa-chevron-up"></i></a></li>
-        <li><a href="#" data-key="down" title="Move down"><i class="fa fa-fw fa-chevron-down"></i></a></li>
-        <li><a href="#" data-key="before" title="Insert new before"><i class="fa fa-fw fa-arrow-circle-up"></i></a></li>
-        <li><a href="#" data-key="after" title="Insert new after"><i class="fa fa-fw fa-arrow-circle-down"></i></a></li>
-        <li><a href="#" data-key="add" title="Add new"><i class="fa fa-fw fa-plus-circle"></i></a></li>
-        <li><a href="#" data-key="key" title="Edit key"><i class="fa fa-fw fa-key"></i></a></li>
-        <li><a href="#" data-key="value" title="Edit value"><i class="fa fa-fw fa-pencil"></i></a></li>
-        <li><a href="#" data-key="null" title="Set to null"><i class="fa fa-fw fa-ban"></i></a></li>        
-        <li><a href="#" data-key="array" title="Wrap in array"><span class="mono">[]</span></a></li>        
-        <li><a href="#" data-key="object" title="Wrap in object"><span class="mono">{}</span></a></li>        
-        <li><a href="#" data-key="parent" title="Select parent"><i class="fa fa-fw fa-external-link"></i></a></li>
-        <li><a href="#" data-key="delete" title="Delete"><i class="fa fa-fw fa-trash"></i></a></li>
-      </ul>
+      <div class="editor">
+        <h2><em>{{type}}</em></h2>
+        <ul>
+          <li><a href="#" data-key="up" title="Move up"><i class="fa fa-fw fa-chevron-up"></i></a></li>
+          <li><a href="#" data-key="down" title="Move down"><i class="fa fa-fw fa-chevron-down"></i></a></li>
+          <li><a href="#" data-key="before" title="Insert new before"><i class="fa fa-fw fa-arrow-circle-up"></i></a></li>
+          <li><a href="#" data-key="after" title="Insert new after"><i class="fa fa-fw fa-arrow-circle-down"></i></a></li>
+          <li><a href="#" data-key="add" title="Add new"><i class="fa fa-fw fa-plus-circle"></i></a></li>
+          <li><a href="#" data-key="key" title="Edit key"><i class="fa fa-fw fa-key"></i></a></li>
+          <li><a href="#" data-key="value" title="Edit value"><i class="fa fa-fw fa-pencil"></i></a></li>
+          <li><a href="#" data-key="null" title="Set to null"><i class="fa fa-fw fa-ban"></i></a></li>        
+          <li><a href="#" data-key="array" title="Wrap in array"><span class="mono">[]</span></a></li>        
+          <li><a href="#" data-key="object" title="Wrap in object"><span class="mono">{}</span></a></li>        
+          <li><a href="#" data-key="parent" title="Select parent"><i class="fa fa-fw fa-external-link"></i></a></li>
+          <li><a href="#" data-key="delete" title="Delete"><i class="fa fa-fw fa-trash"></i></a></li>
+        </ul>
+      </div>
     </script>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
