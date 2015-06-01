@@ -1,0 +1,60 @@
+    <script>  
+      $(document).foundation();
+      
+      $( function(){       
+        var $inputJson = $( '#input-json-data' );
+        var $inputH5on = $( '#input-h5on-data' );
+        var $inputHtml = $( '#input-html-data' );
+
+        var $outputJson = $( '#output-json-data' );
+        var $outputH5on = $( '#output-h5on-data' );
+        var $outputHtml = $( '#output-html-data' );
+        
+        var $execute = $( '[value="Execute"]' );
+        var $query = $( '[name="query"]' );
+        
+        $inputJson.text( JSON.stringify( sampleData, null, 2 ) );
+        
+        function inputChanged(){
+          hljs.highlightBlock( $inputJson[ 0 ] );
+          
+          var json = JSON.parse( $inputJson.text() );
+          var $h5on = $.h5on( json );
+          $inputH5on.html( $h5on );
+          
+          $inputHtml.text( pretty( $inputH5on.find( '> *' ) ) );
+          hljs.highlightBlock( $inputHtml[ 0 ] );
+        }
+        
+        $query.val( 'js-object:has( > [data-key="Weight"] )' );
+        
+        $execute.click( function(){
+          inputChanged();
+          
+          var query = $query.val().trim();
+          
+          var json = JSON.parse( $inputJson.text() );
+          var $h5on = $.h5on( json );          
+          
+          if( query !== '' ){
+            $h5on = $inputH5on.find( query );            
+          }
+          
+          $outputJson.text( JSON.stringify( $h5on.h5on(), null, 2 ) );
+          hljs.highlightBlock( $outputJson[ 0 ] );
+          
+          json = JSON.parse( $outputJson.text() );
+          $h5on = $.h5on( json );
+          $outputH5on.html( $h5on );
+          
+          $outputHtml.text( pretty( $outputH5on.find( '> *' ) ) );
+          hljs.highlightBlock( $outputHtml[ 0 ] );
+          
+          return false;
+        });        
+        
+        $( '#input-h5on, #input-html' ).on( 'toggled', inputChanged );      
+        
+        $execute.click();
+      });
+    </script>

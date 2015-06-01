@@ -2,7 +2,6 @@ var sampleData = {
   "Name": "Akosua",
   "Occupation": "Zombie Hunter",
   "Is Infected": false,
-  "Stats": [ 12, 11, 15, 16, 10, 12 ],
   "Equipment": [
     {
       "Name": "Backpack",
