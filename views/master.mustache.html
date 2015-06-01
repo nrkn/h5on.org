@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>h5on.org - Demos</title>
+    <title>h5on.org - {{title}}</title>
     <link rel="stylesheet" href="css/foundation.css" />
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans" />
     <link rel="stylesheet" href="css/h5on.css" />
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="//cloud.typography.com/6291652/793188/css/fonts.css" />
     <script src="js/vendor/modernizr.js"></script>
-    
+    {{{head}}}
   </head>
   <body>   
     <div class="row">
@@ -32,18 +32,11 @@
           </h3>
           <nav>
             <ul>
-                <li>
-                  <a href="/"><i class="fa fa-home" title="Home"></i></a>
+              {{#nav}}
+                <li{{#isCurrent}} class="current"{{/isCurrent}}>
+                  <a href="{{{href}}}">{{{html}}}</a>
                 </li>
-                <li>
-                  <a href="https://github.com/nrkn/h5on/blob/master/readme.md">Docs</a>
-                </li>
-                <li class="current">
-                  <a href="demos.html">Demos</a>
-                </li>
-                <li>
-                  <a href="https://github.com/nrkn/h5on">GitHub</a>
-                </li>
+              {{/nav}}
             </ul>
           </nav>
         </header>
@@ -52,23 +45,7 @@
     <div class="row">
       <div class="large-12 columns">
         <main>
-                    <h2>Demos</h2>
-          <div class="row">
-            <div class="large-6 columns">
-              <h3>Interactive Selector Demo</h3>
-              <p>
-                Try out different selectors with the default JSON input data, or edit the data yourself.
-              </p>
-              <a class="theme-button" href="demo.html">Interactive Demo</a>
-            </div>
-            <div class="large-6 columns">
-              <h3>H5ON Editor Demo</h3>
-              <p>
-                A simple visual editor that allows you to manipulate H5ON objects directly in the browser.
-              </p>
-              <a class="theme-button" href="editor.html">Editor</a>
-            </div>
-          </div>
+          {{{main}}}
         </main>
       </div>
     </div>    
@@ -90,7 +67,7 @@
     <script src="js/pretty.js"></script>
     <script src="js/sample-data.js"></script>
     <script src="js/h5on.jquery.min.js"></script>
-    
+    {{{scripts}}}
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

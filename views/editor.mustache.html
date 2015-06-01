@@ -1,0 +1,38 @@
+          <h2>Editor</h2>
+          <div class="row">
+            <div class="large-7 columns">
+              <h3>H5ON</h3>
+              <p>Click an element to edit. Hover buttons for description or <a href="#" id="view-key">view key</a>.</p>
+              <div id="editor-key">
+                <ul class="large-block-grid-4">
+                  <li><i class="fa fa-fw fa-chevron-up"></i> <label>Move up</label></li>
+                  <li><i class="fa fa-fw fa-chevron-down"></i> <label>Move down</label></li>
+                  <li><i class="fa fa-fw fa-arrow-circle-up"></i> <label>Insert new before</label></li>
+                  <li><i class="fa fa-fw fa-arrow-circle-down"></i> <label>Insert new after</label></li>
+                  <li><i class="fa fa-fw fa-plus-circle"></i> <label>Add new</label></li>
+                  <li><i class="fa fa-fw fa-key"></i> <label>Edit key</label></li>
+                  <li><i class="fa fa-fw fa-pencil"></i> <label>Edit value</label></li>
+                  <li><i class="fa fa-fw fa-ban"></i> <label>Set to null</label></li>        
+                  <li><span class="mono">[]</span> <label>Wrap in array</label></li>        
+                  <li><span class="mono">{}</span> <label>Wrap in object</label></li>        
+                  <li><i class="fa fa-fw fa-external-link"></i> <label>Select parent</label></li>
+                  <li><i class="fa fa-fw fa-trash"></i> <label>Delete</label></li>
+                </ul>
+              </div>
+              <div id="input-h5on"></div>
+            </div>
+            <div class="large-5 columns">
+              <ul class="tabs" data-tab>
+                <li class="tab-title active"><a href="#output-json">JSON</a></li>
+                <li class="tab-title"><a href="#output-html">HTML</a></li>
+              </ul>
+              <div class="tabs-content">
+                <div class="content active" id="output-json">
+                  <pre><code id="output-json-data" class="json"></code></pre>
+                </div>
+                <div class="content" id="output-html">
+                  <pre><code id="output-html-data" class="html"></code></pre>
+                </div>
+              </div>              
+            </div>
+          </div> 

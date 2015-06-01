@@ -3,16 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>h5on.org</title>
+    <title>h5on.org - Demo</title>
     <link rel="stylesheet" href="css/foundation.css" />
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans" />
-    <link rel="stylesheet" href="h5on.css" />
-    <link rel="stylesheet" href="main.css" />
-    <link rel="stylesheet" href="solarized_light.css" />
-    <link rel="stylesheet" href="h5on-solarized-light.css" />
+    <link rel="stylesheet" href="css/h5on.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/solarized_light.css" />
+    <link rel="stylesheet" href="css/h5on-solarized-light.css" />
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="//cloud.typography.com/6291652/793188/css/fonts.css" />
     <script src="js/vendor/modernizr.js"></script>
+    
   </head>
   <body>   
     <div class="row">
@@ -20,7 +21,7 @@
         <header>
           <div class="row">
             <div class="large-5 columns">
-              <h1><a href="/"><img src="h5on.svg" style="height: 1.5em; width: auto;" /></a></h1>
+              <h1><a href="/"><img src="img/h5on.svg" style="height: 1.5em; width: auto;" /></a></h1>
             </div>
             <div class="large-7 columns">
               <h2>HTML 5 Object Notation</h2>
@@ -31,18 +32,18 @@
           </h3>
           <nav>
             <ul>
-              <li>
-                <a href="/"><i class="fa fa-home" title="Home"></i></a>
-              </li>            
-              <li>
-                <a href="https://github.com/nrkn/h5on/blob/master/readme.md">Docs</a>
-              </li>
-              <li class="current">
-                <a href="demos.html">Demos</a>
-              </li>
-              <li>
-                <a href="https://github.com/nrkn/h5on">GitHub</a>
-              </li>
+                <li>
+                  <a href="/"><i class="fa fa-home" title="Home"></i></a>
+                </li>
+                <li>
+                  <a href="https://github.com/nrkn/h5on/blob/master/readme.md">Docs</a>
+                </li>
+                <li class="current">
+                  <a href="demos.html">Demos</a>
+                </li>
+                <li>
+                  <a href="https://github.com/nrkn/h5on">GitHub</a>
+                </li>
             </ul>
           </nav>
         </header>
@@ -51,7 +52,7 @@
     <div class="row">
       <div class="large-12 columns">
         <main>
-          <h2>Interactive</h2>
+                    <h2>Interactive</h2>
           <p>Try traversing the object graph with jQuery - enter some JSON and a jQuery selector and click <strong>Execute</strong>. To see some example selectors, check out the <a href="https://github.com/nrkn/h5on/blob/master/readme.md">docs.</a></p>
           <form>
             <div class="row collapse">
@@ -124,11 +125,11 @@
     <script src="js/underscore-min.js"></script>
     <script src="js/ICanHaz.min.js"></script>
     <script src="js/snap.svg-min.js"></script>
-    <script src="highlight.pack.js"></script>
-    <script src="pretty.js"></script>
-    <script src="sample-data.js"></script>
-    <script src="h5on.js"></script>
-    <script>   
+    <script src="js/highlight.pack.js"></script>
+    <script src="js/pretty.js"></script>
+    <script src="js/sample-data.js"></script>
+    <script src="js/h5on.jquery.min.js"></script>
+        <script>  
       $(document).foundation();
       
       $( function(){       
@@ -196,7 +197,6 @@
 
       ga('create', 'UA-63371398-1', 'auto');
       ga('send', 'pageview');
-
     </script>    
   </body>
 </html>

@@ -1,0 +1,20 @@
+    <script>  
+      $(document).foundation();
+      
+      $( function(){
+        var $demoJsonContainer = $( '#demo-json' );
+        $demoJsonContainer.text( JSON.stringify( sampleData, null, 2 ) );
+        hljs.highlightBlock( $demoJsonContainer[ 0 ] );
+        
+        var $demoH5onContainer = $( '#demo-h5on' );
+        
+        var $demoH5on = $.h5on( sampleData );
+        
+        $demoH5onContainer.append( $demoH5on );
+        
+        var $demoH5onSourceContainer = $( '#demo-h5on-html' );
+        $demoH5onSourceContainer.text( pretty( $demoH5on ) );
+        
+        hljs.highlightBlock( $demoH5onSourceContainer[ 0 ] );
+      });
+    </script>
