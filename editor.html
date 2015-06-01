@@ -197,19 +197,23 @@
         if( isFirst ) $up.addClass( 'disabled' );
         if( isLast ) $down.addClass( 'disabled' );
         
-        $up.click( function(){
-          var $prev = $el.prev();
-          $prev.before( $el );
-          $el.click();
-          return false;
-        });
+        if( !isFirst ){
+          $up.click( function(){
+            var $prev = $el.prev();
+            $prev.before( $el );
+            $el.click();
+            return false;
+          });
+        }
         
-        $down.click( function(){
-          var $next = $el.next();
-          $next.after( $el );
-          $el.click();
-          return false;
-        });
+        if( !isLast ){
+          $down.click( function(){
+            var $next = $el.next();
+            $next.after( $el );
+            $el.click();
+            return false;
+          });
+        }
         
         $before.click( function(){
           var $new = isProperty ? $.h5on( null, 'key' ) : $.h5on( null );
