@@ -4,7 +4,7 @@ var path = require( 'path' );
 
 var pages = {
   index: {
-    title: 'Index',
+    title: 'Home',
     navIndex: 0
   },
   demos: {
